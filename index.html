@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全渠道AI人文与纪实创作者追踪中心</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f3f4f6;
+    color: #1f2937;
+    line-height: 1.5;
+  }
+  .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #fff;
+    padding: 28px 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  header h1 { font-size: 22px; font-weight: 700; }
+  header p { color: #94a3b8; font-size: 13px; margin-top: 6px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-top: 3px solid #64748b;
+  }
+  .stat-card.douyin { border-top-color: #000; }
+  .stat-card.bilibili { border-top-color: #00a1d6; }
+  .stat-card.xiaohongshu { border-top-color: #ff2442; }
+  .stat-card.ai-human { border-top-color: #8b5cf6; }
+  .stat-card.ai-doc { border-top-color: #f59e0b; }
+  .stat-card.human-doc { border-top-color: #10b981; }
+  .stat-label { font-size: 11px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: #111827; margin-top: 4px; }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: #fff;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .toolbar input, .toolbar select {
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+  }
+  .toolbar input:focus, .toolbar select:focus { border-color: #3b82f6; }
+  .toolbar input[type="text"] { min-width: 180px; }
+  .toolbar .spacer { flex: 1; }
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-primary { background: #3b82f6; color: #fff; }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-success { background: #10b981; color: #fff; }
+  .btn-success:hover { background: #059669; }
+  .btn-secondary { background: #f3f4f6; color: #374151; }
+  .btn-secondary:hover { background: #e5e7eb; }
+  .btn-danger { background: #ef4444; color: #fff; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.15s;
+  }
+  .tab:hover { background: #f9fafb; }
+  .tab.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+  .table-wrap {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    overflow-x: auto;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #f9fafb;
+    color: #4b5563;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid #e5e7eb;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  tbody tr { border-bottom: 1px solid #f3f4f6; transition: background 0.12s; }
+  tbody tr:hover { background: #f9fafb; }
+  tbody td { padding: 12px 14px; vertical-align: top; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag-ai-human { background: #ede9fe; color: #6d28d9; }
+  .tag-ai-doc { background: #fef3c7; color: #92400e; }
+  .tag-human-doc { background: #d1fae5; color: #065f46; }
+  .platform-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .plat-douyin { background: #000; color: #fff; }
+  .plat-bilibili { background: #00a1d6; color: #fff; }
+  .plat-xiaohongshu { background: #ff2442; color: #fff; }
+  .tier-tag {
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tier-head { background: #fef9c3; color: #713f12; }
+  .tier-mid { background: #dbeafe; color: #1e3a8a; }
+  .tier-tail { background: #f3f4f6; color: #374151; }
+
+  .link-list { display: flex; flex-direction: column; gap: 3px; }
+  .link-list a { color: #2563eb; text-decoration: none; font-size: 12px; word-break: break-all; }
+  .link-list a:hover { text-decoration: underline; }
+  .note-cell { max-width: 220px; font-size: 12px; color: #4b5563; line-height: 1.45; }
+
+  .actions { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h3 { font-size: 16px; font-weight: 600; }
+  .modal-body { padding: 20px 22px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #4b5563; margin-bottom: 5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 6px;
+    font-size: 13px; outline: none; font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #3b82f6; }
+  .form-group textarea { resize: vertical; min-height: 56px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-footer {
+    padding: 14px 22px; border-top: 1px solid #e5e7eb;
+    display: flex; justify-content: flex-end; gap: 8px;
+  }
+
+  .empty-state { text-align: center; padding: 50px 20px; color: #9ca3af; }
+  .hidden { display: none !important; }
+
+  .fans-badge { font-weight: 600; color: #111827; white-space: nowrap; font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar input[type="text"] { min-width: 0; width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+    header h1 { font-size: 18px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>全渠道AI人文与纪实创作者追踪中心</h1>
+    <p>抖音 / B站 / 小红书 × AI人文 / AI纪实 / 人文纪实 × 头部 + 中腰部创作者监测</p>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">创作者总数</div><div class="stat-value" id="st-total">0</div></div>
+    <div class="stat-card douyin"><div class="stat-label">抖音</div><div class="stat-value" id="st-douyin">0</div></div>
+    <div class="stat-card bilibili"><div class="stat-label">B站</div><div class="stat-value" id="st-bilibili">0</div></div>
+    <div class="stat-card xiaohongshu"><div class="stat-label">小红书</div><div class="stat-value" id="st-xiaohongshu">0</div></div>
+    <div class="stat-card ai-human"><div class="stat-label">AI人文</div><div class="stat-value" id="st-ai-human">0</div></div>
+    <div class="stat-card ai-doc"><div class="stat-label">AI纪实</div><div class="stat-value" id="st-ai-doc">0</div></div>
+    <div class="stat-card human-doc"><div class="stat-label">人文纪实</div><div class="stat-value" id="st-human-doc">0</div></div>
+    <div class="stat-card"><div class="stat-label">头部</div><div class="stat-value" id="st-head">0</div></div>
+    <div class="stat-card"><div class="stat-label">中腰部</div><div class="stat-value" id="st-mid">0</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="搜索创作者、账号、作品、备注...">
+    <select id="platformFilter"><option value="">全部渠道</option><option value="抖音">抖音</option><option value="B站">B站</option><option value="小红书">小红书</option></select>
+    <select id="categoryFilter"><option value="">全部品类</option><option value="AI人文类">AI人文类</option><option value="AI纪实类">AI纪实类</option><option value="人文纪实类">人文纪实类</option></select>
+    <select id="tierFilter"><option value="">全部体量</option><option value="头部">头部</option><option value="中腰部">中腰部</option><option value="尾部">尾部</option></select>
+    <select id="statusFilter"><option value="">全部状态</option><option value="追踪中">追踪中</option><option value="已暂停">已暂停</option><option value="已停更">已停更</option></select>
+    <div class="spacer"></div>
+    <button class="btn btn-secondary btn-sm" onclick="importData()">导入JSON</button>
+    <button class="btn btn-secondary btn-sm" onclick="exportData()">导出JSON</button>
+    <button class="btn btn-primary" onclick="openModal()">+ 添加创作者</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="setView('all')">全部</div>
+    <div class="tab" onclick="setView('douyin')">抖音</div>
+    <div class="tab" onclick="setView('bilibili')">B站</div>
+    <div class="tab" onclick="setView('xiaohongshu')">小红书</div>
+    <div class="tab" onclick="setView('ai-human')">AI人文</div>
+    <div class="tab" onclick="setView('ai-doc')">AI纪实</div>
+    <div class="tab" onclick="setView('human-doc')">人文纪实</div>
+    <div class="tab" onclick="setView('head')">头部</div>
+    <div class="tab" onclick="setView('mid')">中腰部</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>创作者</th>
+          <th>渠道</th>
+          <th>品类</th>
+          <th>粉丝量</th>
+          <th>体量</th>
+          <th>内容定位</th>
+          <th>作品链接</th>
+          <th>备注/追踪记录</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="creatorTable"></tbody>
+    </table>
+    <div class="empty-state hidden" id="emptyState">
+      <p>暂无符合条件的创作者</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">添加创作者</h3>
+      <button class="btn btn-sm btn-secondary" onclick="closeModal()" style="background:transparent;color:#6b7280;font-size:20px;padding:2px 6px;">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId">
+      <div class="form-row">
+        <div class="form-group"><label>创作者名称 *</label><input type="text" id="mName" placeholder="例如：AI疯人院"></div>
+        <div class="form-group"><label>平台账号</label><input type="text" id="mAccount" placeholder="抖音号/B站UID/小红书号"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>渠道 *</label><select id="mPlatform"><option value="抖音">抖音</option><option value="B站">B站</option><option value="小红书">小红书</option><option value="多平台">多平台</option></select></div>
+        <div class="form-group"><label>品类 *</label><select id="mCategory"><option value="AI人文类">AI人文类</option><option value="AI纪实类">AI纪实类</option><option value="人文纪实类">人文纪实类</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>粉丝量 *</label><input type="text" id="mFans" placeholder="例如：98.1万 或 500万+"></div>
+        <div class="form-group"><label>体量</label><select id="mTier"><option value="头部">头部</option><option value="中腰部">中腰部</option><option value="尾部">尾部</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>追踪状态</label><select id="mStatus"><option value="追踪中">追踪中</option><option value="已暂停">已暂停</option><option value="已停更">已停更</option></select></div>
+        <div class="form-group"><label>内容定位</label><input type="text" id="mPosition" placeholder="例如：AI纪录片创作者"></div>
+      </div>
+      <div class="form-group">
+        <label>作品链接（每行一个，格式：作品名|链接 或仅链接）</label>
+        <textarea id="mLinks" placeholder="山海经AI纪录片|https://v.douyin.com/xxxxx&#10;https://v.douyin.com/yyyyy"></textarea>
+      </div>
+      <div class="form-group">
+        <label>备注 / 历史高赞记录 / 追踪日志</label>
+        <textarea id="mNotes" placeholder="记录历史高赞作品、内容特点、更新周期等..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveCreator()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== Initial Data ==========
+let creators = [
+  // ===== 抖音 - AI人文类 =====
+  { id:1, name:"AI疯人院（冯彬）", account:"98969694", platform:"抖音", category:"AI纪实类", fans:"98.1万+", fansNum:981000, tier:"中腰部", position:"AI纪录片创作者，复原古籍神话", links:[{name:"山海经AI纪录片",url:"https://www.douyin.com/search/冯彬山海经第一篇"},{name:"西游记AI短片",url:"https://news.qq.com/rain/a/20240220A04Y4400"}], notes:"前游戏技术美术，15年行业经验；ChatGPT+Midjourney+可灵/即梦/Vidu；全网播放量近亿，B站热门榜首。高赞：山海经系列", status:"追踪中", createdAt:"2026-04-22" },
+  { id:2, name:"大圆镜科普", account:"94738653271", platform:"抖音", category:"AI人文类", fans:"200万+", fansNum:2000000, tier:"中腰部", position:"AIGC科学史科普，天桥脑科学研究院", links:[{name:"生命科学简史",url:"https://www.douyin.com/user/94738653271"}], notes:"半年涨粉超200万，总播放量超3.5亿。抖音精选官方评价\"用AIGC把科学史拍成科幻大片\"。高赞：人体免疫系统、死亡边界", status:"追踪中", createdAt:"2026-04-22" },
+  { id:3, name:"AI海公子", account:"未公开", platform:"抖音", category:"AI人文类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"AI历史人物解说，中国古代史", links:[], notes:"左宗棠收复新疆系列、刘邦传奇一生、刘裕寄奴逆袭。用AI生成历史画面配合解说", status:"追踪中", createdAt:"2026-04-22" },
+  { id:4, name:"X柠檬星", account:"未公开", platform:"抖音", category:"AI人文类", fans:"2.7万", fansNum:27000, tier:"尾部", position:"AI历史社会分析，制度演变", links:[{name:"革命的终点却是背叛",url:"https://www.douyin.com/search/X柠檬星"}], notes:"单条获赞26.8万+。内容涉及中国历史制度演变、社会结构，风格偏学术深度。成长型账号", status:"追踪中", createdAt:"2026-04-22" },
+  { id:5, name:"秋芝2046", account:"未公开", platform:"抖音", category:"AI人文类", fans:"130万", fansNum:1300000, tier:"中腰部", position:"AI工具应用/AI人文科技", links:[{name:"DeepSeek实用技巧",url:"https://www.douyin.com/search/秋芝2046"}], notes:"入选2025年度100条必看知识作品。女性AI创作者，专注AI科技实用技巧，全网超百万粉丝", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== 抖音 - AI纪实类 =====
+  { id:6, name:"野生布里茨", account:"未公开", platform:"抖音", category:"AI纪实类", fans:"20万+", fansNum:200000, tier:"尾部", position:"AI短片/电影级AI纪实", links:[{name:"月光宝盒",url:"https://www.douyin.com/search/野生布里茨"}], notes:"2026年3月起号，首条作品3000万播放、255万点赞。入选抖音精选3月榜单、未来导演扶持计划。叙事完整度像电影纪录片", status:"追踪中", createdAt:"2026-04-22" },
+  { id:7, name:"奔放的小豆豆", account:"D16510008", platform:"抖音", category:"AI纪实类", fans:"530万", fansNum:5300000, tier:"头部", position:"地图沙盘+影像解说，硬核历史", links:[{name:"二战简史",url:"https://www.douyin.com/search/奔放的小豆豆"}], notes:"抖音精选创作者。80分钟二战简史、4小时局部抗战还原、抗美援朝系列。530万粉丝追更硬核历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:8, name:"历史调研室", account:"5555684E", platform:"抖音", category:"AI纪实类", fans:"24.5万(抖音)", fansNum:245000, tier:"尾部", position:"文史深度纪实，B站为主", links:[{name:"B站主页",url:"https://space.bilibili.com/"}], notes:"B站500万+粉丝，抖音同步分发。内容以严谨历史调研为基础，文史类深度长视频", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== 抖音 - 人文纪实类 =====
+  { id:9, name:"山白", account:"shanbai2023", platform:"抖音", category:"人文纪实类", fans:"1684万", fansNum:16840000, tier:"头部", position:"非遗传承/乡村手工艺纪实", links:[{name:"龙泉青瓷",url:"https://www.douyin.com/search/山白"}], notes:"00后非遗传承人，2023年3月起号，获赞1.3亿。抖音人文社科榜榜首，一周涨粉59万+。叔侄两人拍乡间手艺", status:"追踪中", createdAt:"2026-04-22" },
+  { id:10, name:"南翔不爱吃饭", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"1500万", fansNum:15000000, tier:"头部", position:"非遗美食文化/古代菜色还原", links:[{name:"古代诗传菜色",url:"https://www.douyin.com/search/南翔不爱吃饭"}], notes:"抖音非遗创作者Top 10，92年生现居苏州。抖音精选3月榜单入选者。非遗短视频美学代表", status:"追踪中", createdAt:"2026-04-22" },
+  { id:11, name:"江寻千（九月）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"数百万", fansNum:3000000, tier:"头部", position:"非遗传统文化（京剧等）", links:[{name:"京剧非遗",url:"https://www.douyin.com/search/江寻千"}], notes:"被称为新生代李子柒，95后非遗创作者。2026抖音非遗创新发展趋势报告最受关注Top 10", status:"追踪中", createdAt:"2026-04-22" },
+  { id:12, name:"郝家豁", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"数百万", fansNum:2000000, tier:"中腰部", position:"语文课本影视化还原", links:[{name:"孔乙己",url:"https://www.douyin.com/search/郝家豁"},{name:"金色的鱼钩",url:"https://www.douyin.com/search/郝家豁"}], notes:"00后非专业团队，电话销售+应届大学生。播放量过亿。#那些意难平的语文课文 累计播放超5.5亿。入选青年创作者成长计划", status:"追踪中", createdAt:"2026-04-22" },
+  { id:13, name:"李蠕蠕", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"数百万", fansNum:2500000, tier:"中腰部", position:"年轻人情绪与深度思考", links:[{name:"蠕蠕想第一",url:"https://www.douyin.com/search/李蠕蠕"}], notes:"抖音精选3月榜单入选。镜头里藏着当代年轻人的情绪出口，深度思考也能获得流量", status:"追踪中", createdAt:"2026-04-22" },
+  { id:14, name:"康呦喂", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"数百万", fansNum:2000000, tier:"中腰部", position:"跨文化纪实探访", links:[], notes:"用纪实镜头搭建跨文化交流桥梁，抖音精选月榜入选创作者", status:"追踪中", createdAt:"2026-04-22" },
+  { id:15, name:"彭南科", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"256万", fansNum:2560000, tier:"中腰部", position:"非遗复刻/服装", links:[{name:"非遗服装复刻",url:"https://www.douyin.com/search/彭南科"}], notes:"12天涨粉250万，52条视频累积256万粉丝。快速增长的非遗类创作者", status:"追踪中", createdAt:"2026-04-22" },
+  { id:16, name:"李程远不远", account:"lichengyuans", platform:"抖音", category:"人文纪实类", fans:"214.8万", fansNum:2148000, tier:"中腰部", position:"纪录片导演，青年成长", links:[{name:"三十而立",url:"https://www.sohu.com/a/427988996_688642"}], notes:"光线传媒视频部总监出身，获赞4613.2万+。专业纪录片背景，电影质感与社会洞察", status:"追踪中", createdAt:"2026-04-22" },
+  { id:17, name:"大圣探世界", account:"91666624839", platform:"抖音", category:"人文纪实类", fans:"86.2万", fansNum:862000, tier:"中腰部", position:"探险/原始部落/人文地理", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAX7e791glfS6Ud2f9Y5gFqczv5szyCTWrW1UUcMDh40ZT94V2YvkXuc_f6yRFVU1d"}], notes:"实地探访+纪录片式解说。非洲哈扎比部落、食人族、印度贫民窟等边缘人群", status:"追踪中", createdAt:"2026-04-22" },
+  { id:18, name:"虫洞行者", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"5-10万", fansNum:75000, tier:"尾部", position:"历史纪录片，中国历史地理", links:[{name:"台湾岛纪EP01",url:"https://www.douyin.com/video/7609524336466119979"},{name:"台湾岛纪EP02",url:"https://www.douyin.com/video/7609632727964519699"}], notes:"未来导演扶持计划、人文星闪耀计划入选。00后团队，纯AI手搓+实景史料", status:"追踪中", createdAt:"2026-04-22" },
+  { id:19, name:"大楚狐狸嗷", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"50-100万", fansNum:750000, tier:"中腰部", position:"先秦历史/民俗/文学", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAIQgXtd_KmQPwz9b5_o0giJ8l7lB8JZV9xdS5JBSClN4"}], notes:"深度考据夏商周文明，学术性与传播性兼具。人文星闪耀计划入选。夏商周汉服发展史、先秦凤凰/龙起源", status:"追踪中", createdAt:"2026-04-22" },
+  { id:20, name:"米三汉", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"400万+", fansNum:4000000, tier:"头部", position:"古典文学超长解读", links:[{name:"450分钟红楼梦",url:"https://www.cqnews.net/1/detail/1296352383730384896/app/content_1296352383730384896.html"}], notes:"95后，湖北大学环艺专业。450分钟红楼梦播放量逾3亿，获赞1200万。降低古典名著阅读门槛", status:"追踪中", createdAt:"2026-04-22" },
+  { id:21, name:"一方见地（璐璟）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"850万+", fansNum:8500000, tier:"头部", position:"植物科普/自然人文纪录片", links:[{name:"深度解析",url:"https://www.niaogebiji.com/article-693347-1.html"}], notes:"与惠东共同创作，3年522个植物视频。植物科普领域顶流。桂花香系列为代表", status:"追踪中", createdAt:"2026-04-22" },
+  { id:22, name:"北京青年x壹次访谈录", account:"bjqn", platform:"抖音", category:"人文纪实类", fans:"579.9万", fansNum:5799000, tier:"头部", position:"人物访谈纪实", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAxWbA1zgjTJEVP8YISawogz86lwTIhqNOZAPLw_8Mygc"}], notes:"人物深度访谈，获赞6130万+。头部访谈纪实账号", status:"追踪中", createdAt:"2026-04-22" },
+  { id:23, name:"武志红", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"头部", fansNum:6000000, tier:"头部", position:"心理现象分析/人文", links:[], notes:"心理现象分析系列。抖音头部心理学/人文知识创作者", status:"追踪中", createdAt:"2026-04-22" },
+  { id:24, name:"混子哥边画边讲", account:"未公开", platform:"抖音", category:"AI人文类", fans:"1400万+", fansNum:14000000, tier:"头部", position:"手绘+AI辅助历史文化科普", links:[{name:"边画边讲系列",url:"https://www.douyin.com/search/混子哥边画边讲"}], notes:"混知品牌创始人陈磊。两个月涨粉千万，全网半年2500万+。入选2025年度100条必看知识作品", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== B站 - AI人文类 =====
+  { id:25, name:"AI疯人院（冯彬）", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"60万+", fansNum:600000, tier:"中腰部", position:"AI纪录片创作者", links:[{name:"山海经B站",url:"https://space.bilibili.com/"}], notes:"B站《山海经》系列上线5小时进热门榜。与抖音同创作者分发", status:"追踪中", createdAt:"2026-04-22" },
+  { id:26, name:"大圆镜科普", account:"B站同名", platform:"B站", category:"AI人文类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"AIGC科学史科普", links:[], notes:"天桥脑科学研究院孵化，B站同步分发科学史AI大片", status:"追踪中", createdAt:"2026-04-22" },
+  { id:27, name:"言川导演AItips", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"垂类新锐", fansNum:50000, tier:"中腰部", position:"AI电影导演", links:[{name:"异影者",url:"https://www.bilibili.com/search?keyword=言川导演"}], notes:"戛纳科幻电影国际AI银奖、北影节AIGC奖项。国内北影上影双获AIGC单元奖项", status:"追踪中", createdAt:"2026-04-22" },
+  { id:28, name:"秋芝2046", account:"B站同名", platform:"B站", category:"AI人文类", fans:"数十万", fansNum:200000, tier:"中腰部", position:"AI工具+人文科技", links:[{name:"DeepSeek技巧",url:"https://search.bilibili.com/all?keyword=秋芝2046"}], notes:"B站+抖音合计超百万。2025年度必看知识作品入选", status:"追踪中", createdAt:"2026-04-22" },
+  { id:29, name:"数字生命卡兹克", account:"B站同名", platform:"B站", category:"AI人文类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"AI深度解析+人文思辨", links:[], notes:"2025年度影响力AI博主。AI产品测评与人文反思，公众号同名", status:"追踪中", createdAt:"2026-04-22" },
+  { id:30, name:"未来设计师KiK", account:"B站同名", platform:"B站", category:"AI人文类", fans:"数十万", fansNum:150000, tier:"中腰部", position:"AI数字艺术+文化创意", links:[], notes:"8年资深设计师，新榜小红书AI账号日榜常驻前列。AI绘画/视频/工具测评", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== B站 - AI纪实类 =====
+  { id:31, name:"野生布里茨", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"数万", fansNum:50000, tier:"尾部", position:"AI短片/电影级纪实", links:[{name:"月光宝盒",url:"https://search.bilibili.com/all?keyword=野生布里茨"}], notes:"B站同步分发，首条视频电影级质感", status:"追踪中", createdAt:"2026-04-22" },
+  { id:32, name:"历史调研室", account:"B站:历史调研室", platform:"B站", category:"AI纪实类", fans:"500万", fansNum:5000000, tier:"头部", position:"文史深度纪实", links:[{name:"B站主页",url:"https://space.bilibili.com/"}], notes:"B站核心阵地，文史类深度长视频顶流。严谨历史调研风格", status:"追踪中", createdAt:"2026-04-22" },
+  { id:33, name:"赖导AboutLai", account:"B站:AboutLai", platform:"B站", category:"人文纪实类", fans:"数百万", fansNum:3000000, tier:"头部", position:"人文纪实/地域影像", links:[{name:"三峡纪实",url:"https://search.bilibili.com/all?keyword=赖导AboutLai"}], notes:"B站百大UP主，首次百大（2025）。电影级运镜记录三峡、秦岭。人文纪实领域标杆", status:"追踪中", createdAt:"2026-04-22" },
+  { id:34, name:"食贫道", account:"B站:食贫道", platform:"B站", category:"人文纪实类", fans:"千万级", fansNum:8000000, tier:"头部", position:"人文美食纪录片", links:[{name:"迷失东京",url:"https://space.bilibili.com/"}], notes:"B站唯一靠纪录片营收千万的UP主。饼叔（张竣）前战地记者出身，5小时人文纪录片", status:"追踪中", createdAt:"2026-04-22" },
+  { id:35, name:"电影最TOP", account:"B站:电影最TOP", platform:"B站", category:"人文纪实类", fans:"500万+", fansNum:5000000, tier:"头部", position:"电影人文解读/纪实风格", links:[], notes:"电影解读领域头部UP主，具有人文深度和纪实风格的影片分析", status:"追踪中", createdAt:"2026-04-22" },
+  { id:36, name:"一条视频", account:"B站:一条视频", platform:"B站", category:"人文纪实类", fans:"500万+", fansNum:5000000, tier:"头部", position:"生活美学/人文纪录片", links:[], notes:"记录中国人日常生活美学，纪录片式呈现", status:"追踪中", createdAt:"2026-04-22" },
+  { id:37, name:"大象放映室", account:"B站:大象放映室", platform:"B站", category:"人文纪实类", fans:"300万+", fansNum:3000000, tier:"头部", position:"时代人物纪实", links:[], notes:"《激荡四十年》系列为代表，用纪录片手法讲述中国改革开放历程", status:"追踪中", createdAt:"2026-04-22" },
+  { id:38, name:"智能路障", account:"B站:智能路障", platform:"B站", category:"AI人文类", fans:"400万+", fansNum:4000000, tier:"头部", position:"游戏人文/鲁迅解读", links:[{name:"鲁迅系列",url:"https://space.bilibili.com/"}], notes:"鲁迅解读系列破圈，游戏区最具人文深度的UP主之一", status:"追踪中", createdAt:"2026-04-22" },
+  { id:39, name:"小约翰可汗", account:"B站:小约翰可汗", platform:"B站", category:"人文纪实类", fans:"800万+", fansNum:8000000, tier:"头部", position:"小国历史纪实/硬核人文", links:[{name:"奇葩小国",url:"https://space.bilibili.com/"}], notes:"B站顶流知识UP主。奇葩小国系列、硬核狠人系列，用幽默方式讲述冷门国家历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:40, name:"渤海小吏", account:"B站:渤海小吏", platform:"B站", category:"人文纪实类", fans:"300万+", fansNum:3000000, tier:"头部", position:"历史战争纪实", links:[], notes:"历史战争深度解读，楚汉争霸、三国等系列。史记+实战推演风格", status:"追踪中", createdAt:"2026-04-22" },
+  { id:41, name:"安州牧", account:"B站:安州牧", platform:"B站", category:"人文纪实类", fans:"200万+", fansNum:2000000, tier:"中腰部", position:"中国历史地图推演", links:[], notes:"《中国通史》系列地图推演，用地图动画讲述中国历史变迁", status:"追踪中", createdAt:"2026-04-22" },
+  { id:42, name:"冲浪普拉斯", account:"B站:冲浪普拉斯", platform:"B站", category:"人文纪实类", fans:"200万+", fansNum:2000000, tier:"中腰部", position:"商业人文纪实", links:[], notes:"中国互联网商业史、企业兴衰纪实。深度商业人文内容", status:"追踪中", createdAt:"2026-04-22" },
+  { id:43, name:"百灵果News", account:"B站:百灵果News", platform:"B站", category:"人文纪实类", fans:"数十万", fansNum:500000, tier:"中腰部", position:"国际人文纪实/新闻", links:[], notes:"台湾UP主，国际新闻人文视角解读，跨文化纪实风格", status:"追踪中", createdAt:"2026-04-22" },
+  { id:44, name:"周二叭", account:"B站:周二叭", platform:"B站", category:"人文纪实类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"社会纪实/边缘人群", links:[], notes:"关注社会边缘群体，用纪录片式手法记录普通人故事", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== 小红书 - AI人文类 =====
+  { id:45, name:"秋芝2046", account:"秋芝2046", platform:"小红书", category:"AI人文类", fans:"数十万", fansNum:200000, tier:"中腰部", position:"AI科技+人文思考", links:[{name:"DeepSeek实战技巧",url:"https://www.xiaohongshu.com/search_result?keyword=秋芝2046"}], notes:"签名\"AI很单纯，复杂的是人\"。全网130万+，小红书为主要阵地之一", status:"追踪中", createdAt:"2026-04-22" },
+  { id:46, name:"数字生命卡兹克", account:"数字生命卡兹克", platform:"小红书", category:"AI人文类", fans:"数万", fansNum:50000, tier:"中腰部", position:"AI深度解析+人文思辨", links:[], notes:"2025年度影响力AI博主。公众号同名，小红书为辅助平台", status:"追踪中", createdAt:"2026-04-22" },
+  { id:47, name:"未来设计师KiK", account:"未来设计师KiK", platform:"小红书", category:"AI人文类", fans:"数十万", fansNum:150000, tier:"中腰部", position:"AI数字艺术+文化创意", links:[], notes:"8年资深设计师，新榜小红书AI账号日榜常驻前列", status:"追踪中", createdAt:"2026-04-22" },
+  { id:48, name:"翎_Ling", account:"翎_Ling", platform:"小红书", category:"AI人文类", fans:"1.6万", fansNum:16000, tier:"尾部", position:"AI虚拟人+国风文化", links:[], notes:"超写实国风虚拟KOL，魔珐科技旗下。与宝格丽、特斯拉等品牌合作", status:"追踪中", createdAt:"2026-04-22" },
+  { id:49, name:"李美人", account:"李美人", platform:"小红书", category:"AI人文类", fans:"分发平台", fansNum:30000, tier:"尾部", position:"AI历史人物传记视频", links:[], notes:"用AI生成\"历史人物的一生\"系列视频。2个月涨粉51万（主要在抖音）", status:"追踪中", createdAt:"2026-04-22" },
+
+  // ===== 小红书 - 人文纪实类 =====
+  { id:50, name:"李子柒", account:"李子柒", platform:"小红书", category:"人文纪实类", fans:"数百万", fansNum:3000000, tier:"头部", position:"田园生活+非遗文化纪实", links:[{name:"雕漆隐花",url:"https://www.xiaohongshu.com/search_result?keyword=李子柒"}], notes:"2024回归当日涨粉75万。全网顶流人文纪实创作者，非遗文化出海标杆", status:"追踪中", createdAt:"2026-04-22" },
+  { id:51, name:"房琪kiki", account:"房琪kiki", platform:"小红书", category:"人文纪实类", fans:"百万级", fansNum:1000000, tier:"头部", position:"人文旅行纪实", links:[{name:"旅行人文",url:"https://www.xiaohongshu.com/search_result?keyword=房琪kiki"}], notes:"抖音2334万粉丝，小红书千瓜数据排名第一。人文感悟式旅行内容", status:"追踪中", createdAt:"2026-04-22" },
+  { id:52, name:"混子哥边画边讲", account:"混子哥边画边讲", platform:"小红书", category:"AI人文类", fans:"数十万", fansNum:500000, tier:"中腰部", position:"历史文化科普漫画", links:[{name:"混知系列",url:"https://www.xiaohongshu.com/search_result?keyword=混子哥边画边讲"}], notes:"全网半年涨粉2500万+，小红书涨粉50万+。用漫画科普历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:53, name:"意公子", account:"意公子", platform:"小红书", category:"人文纪实类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"艺术人文科普", links:[{name:"大话中国艺术史",url:"https://www.xiaohongshu.com/search_result?keyword=意公子"}], notes:"苏东坡等人物短视频播放破亿。《大话中国艺术史》作者，飞博共创MCN", status:"追踪中", createdAt:"2026-04-22" },
+  { id:54, name:"马骏达Mars", account:"马骏达Mars", platform:"小红书", category:"人文纪实类", fans:"不详", fansNum:50000, tier:"中腰部", position:"中国古建筑与园林科普", links:[], notes:"2024小红书涨粉TOP500。专心科普中国古建筑及园林知识，纪实风格", status:"追踪中", createdAt:"2026-04-22" },
+  { id:55, name:"国翠儿", account:"国翠儿", platform:"小红书", category:"人文纪实类", fans:"不详", fansNum:30000, tier:"中腰部", position:"中国传统文化纪实科普", links:[{name:"60秒了解北京中轴线",url:"https://www.xiaohongshu.com/search_result?keyword=国翠儿"}], notes:"结合技术流讲解中国传统文化，抖音精选推荐", status:"追踪中", createdAt:"2026-04-22" },
+  { id:56, name:"山白", account:"山白", platform:"小红书", category:"人文纪实类", fans:"不详", fansNum:50000, tier:"中腰部", position:"传统文化+生活纪实", links:[], notes:"00后创作者，2024小红书涨粉TOP500。传统文化元素融入纪实内容", status:"追踪中", createdAt:"2026-04-22" },
+  { id:57, name:"南翔不爱吃饭", account:"南翔不爱吃饭", platform:"小红书", category:"人文纪实类", fans:"不详", fansNum:50000, tier:"中腰部", position:"传统文化纪实", links:[], notes:"2024涨粉表现突出，以传统文化元素获得用户偏爱", status:"追踪中", createdAt:"2026-04-22" },
+  { id:58, name:"星球研究所", account:"星球研究所", platform:"小红书", category:"人文纪实类", fans:"运营中", fansNum:200000, tier:"中腰部", position:"自然地理+人文纪实", links:[{name:"地理科普",url:"https://www.xiaohongshu.com/search_result?keyword=星球研究所"}], notes:"中国地理科普顶流，纪实影像+深度图文。全网知名度极高", status:"追踪中", createdAt:"2026-04-22" },
+];
+
+let nextId = creators.length + 1;
+let currentView = 'all';
+
+function parseFans(fansStr) {
+  if (!fansStr) return 0;
+  const s = fansStr.toString().replace(/,/g, '').replace(/\+/g, '');
+  let num = parseFloat(s);
+  if (s.includes('万')) num *= 10000;
+  if (s.includes('亿')) num *= 100000000;
+  return num || 0;
+}
+
+function tierClass(tier) {
+  return tier === '头部' ? 'tier-head' : tier === '中腰部' ? 'tier-mid' : 'tier-tail';
+}
+function platClass(plat) {
+  return plat === '抖音' ? 'plat-douyin' : plat === 'B站' ? 'plat-bilibili' : 'plat-xiaohongshu';
+}
+function catClass(cat) {
+  return cat === 'AI人文类' ? 'tag-ai-human' : cat === 'AI纪实类' ? 'tag-ai-doc' : 'tag-human-doc';
+}
+
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const plat = document.getElementById('platformFilter').value;
+  const cat = document.getElementById('categoryFilter').value;
+  const tier = document.getElementById('tierFilter').value;
+  const status = document.getElementById('statusFilter').value;
+
+  let filtered = creators.filter(c => {
+    if (search && !(
+      c.name.toLowerCase().includes(search) ||
+      (c.account && c.account.toLowerCase().includes(search)) ||
+      (c.position && c.position.toLowerCase().includes(search)) ||
+      (c.notes && c.notes.toLowerCase().includes(search)) ||
+      c.links.some(l => (l.name || '').toLowerCase().includes(search))
+    )) return false;
+    if (plat && c.platform !== plat) return false;
+    if (cat && c.category !== cat) return false;
+    if (tier && c.tier !== tier) return false;
+    if (status && c.status !== status) return false;
+    if (currentView === 'douyin' && c.platform !== '抖音') return false;
+    if (currentView === 'bilibili' && c.platform !== 'B站') return false;
+    if (currentView === 'xiaohongshu' && c.platform !== '小红书') return false;
+    if (currentView === 'ai-human' && c.category !== 'AI人文类') return false;
+    if (currentView === 'ai-doc' && c.category !== 'AI纪实类') return false;
+    if (currentView === 'human-doc' && c.category !== '人文纪实类') return false;
+    if (currentView === 'head' && c.tier !== '头部') return false;
+    if (currentView === 'mid' && c.tier !== '中腰部') return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('creatorTable');
+  const empty = document.getElementById('emptyState');
+  tbody.innerHTML = '';
+
+  if (filtered.length === 0) {
+    empty.classList.remove('hidden');
+  } else {
+    empty.classList.add('hidden');
+    filtered.forEach(c => {
+      const tr = document.createElement('tr');
+      const linksHtml = c.links && c.links.length
+        ? `<div class="link-list">${c.links.map(l => `<a href="${l.url}" target="_blank">${l.name || l.url}</a>`).join('')}</div>`
+        : '<span style="color:#9ca3af;font-size:12px;">—</span>';
+      tr.innerHTML = `
+        <td><strong>${c.name}</strong><br><span style="font-size:11px;color:#6b7280;">@${c.account || '—'}</span></td>
+        <td><span class="platform-tag ${platClass(c.platform)}">${c.platform}</span></td>
+        <td><span class="tag ${catClass(c.category)}">${c.category}</span></td>
+        <td class="fans-badge">${c.fans}</td>
+        <td><span class="tier-tag ${tierClass(c.tier)}">${c.tier}</span></td>
+        <td style="font-size:12px;color:#374151;">${c.position || '—'}</td>
+        <td>${linksHtml}</td>
+        <td class="note-cell">${c.notes || '—'}</td>
+        <td style="font-size:12px;">${c.status}</td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-sm btn-secondary" onclick="editCreator(${c.id})">编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCreator(${c.id})">删除</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+  updateStats();
+}
+
+function updateStats() {
+  const total = creators.length;
+  const douyin = creators.filter(c => c.platform === '抖音').length;
+  const bilibili = creators.filter(c => c.platform === 'B站').length;
+  const xiaohongshu = creators.filter(c => c.platform === '小红书').length;
+  const aiHuman = creators.filter(c => c.category === 'AI人文类').length;
+  const aiDoc = creators.filter(c => c.category === 'AI纪实类').length;
+  const humanDoc = creators.filter(c => c.category === '人文纪实类').length;
+  const head = creators.filter(c => c.tier === '头部').length;
+  const mid = creators.filter(c => c.tier === '中腰部').length;
+  document.getElementById('st-total').textContent = total;
+  document.getElementById('st-douyin').textContent = douyin;
+  document.getElementById('st-bilibili').textContent = bilibili;
+  document.getElementById('st-xiaohongshu').textContent = xiaohongshu;
+  document.getElementById('st-ai-human').textContent = aiHuman;
+  document.getElementById('st-ai-doc').textContent = aiDoc;
+  document.getElementById('st-human-doc').textContent = humanDoc;
+  document.getElementById('st-head').textContent = head;
+  document.getElementById('st-mid').textContent = mid;
+}
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderTable();
+}
+
+function openModal() {
+  document.getElementById('modalTitle').textContent = '添加创作者';
+  document.getElementById('editId').value = '';
+  ['mName','mAccount','mFans','mPosition','mLinks','mNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mPlatform').value = '抖音';
+  document.getElementById('mCategory').value = 'AI人文类';
+  document.getElementById('mTier').value = '中腰部';
+  document.getElementById('mStatus').value = '追踪中';
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+function editCreator(id) {
+  const c = creators.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modalTitle').textContent = '编辑创作者';
+  document.getElementById('editId').value = c.id;
+  document.getElementById('mName').value = c.name;
+  document.getElementById('mAccount').value = c.account || '';
+  document.getElementById('mPlatform').value = c.platform;
+  document.getElementById('mCategory').value = c.category;
+  document.getElementById('mFans').value = c.fans;
+  document.getElementById('mTier').value = c.tier;
+  document.getElementById('mStatus').value = c.status;
+  document.getElementById('mPosition').value = c.position || '';
+  document.getElementById('mLinks').value = c.links.map(l => l.name ? `${l.name}|${l.url}` : l.url).join('\n');
+  document.getElementById('mNotes').value = c.notes || '';
+  document.getElementById('modal').classList.add('active');
+}
+
+function saveCreator() {
+  const idVal = document.getElementById('editId').value;
+  const name = document.getElementById('mName').value.trim();
+  const fansStr = document.getElementById('mFans').value.trim();
+  if (!name || !fansStr) { alert('请填写创作者名称和粉丝量'); return; }
+
+  const linksRaw = document.getElementById('mLinks').value.trim().split('\n').filter(Boolean);
+  const links = linksRaw.map(line => {
+    if (line.includes('|')) { const [n,u] = line.split('|',2); return {name:n.trim(), url:u.trim()}; }
+    return {name:line.trim().substring(0,30)+(line.length>30?'...':''), url:line.trim()};
+  });
+
+  const data = {
+    id: idVal ? parseInt(idVal) : nextId++,
+    name, account: document.getElementById('mAccount').value.trim(),
+    platform: document.getElementById('mPlatform').value,
+    category: document.getElementById('mCategory').value,
+    fans: fansStr, fansNum: parseFans(fansStr),
+    tier: document.getElementById('mTier').value,
+    status: document.getElementById('mStatus').value,
+    position: document.getElementById('mPosition').value.trim(),
+    links, notes: document.getElementById('mNotes').value.trim(),
+    createdAt: idVal ? (creators.find(c=>c.id===parseInt(idVal))?.createdAt||'2026-04-22') : new Date().toISOString().split('T')[0]
+  };
+
+  if (idVal) { const idx = creators.findIndex(c=>c.id===parseInt(idVal)); if(idx!==-1) creators[idx]=data; }
+  else creators.push(data);
+  closeModal(); renderTable();
+}
+
+function deleteCreator(id) {
+  if (!confirm('确定删除？')) return;
+  creators = creators.filter(c => c.id !== id);
+  renderTable();
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(creators, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `创作者追踪_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try { const data=JSON.parse(ev.target.result); if(Array.isArray(data)){ creators=data; nextId=creators.reduce((m,c)=>Math.max(m,c.id||0),0)+1; renderTable(); alert('导入成功'); }
+      else alert('格式错误'); } catch(err){ alert('解析失败:'+err.message); }
+    }; reader.readAsText(file);
+  }; input.click();
+}
+
+['searchInput','platformFilter','categoryFilter','tierFilter','statusFilter'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderTable);
+});
+renderTable();
+</script>
+</body>
+</html>
