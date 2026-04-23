@@ -321,8 +321,8 @@
         <div class="form-group"><label>内容定位</label><input type="text" id="mPosition" placeholder="例如：AI纪录片创作者"></div>
       </div>
       <div class="form-group">
-        <label>作品链接（每行一个，格式：作品名|链接 或仅链接）</label>
-        <textarea id="mLinks" placeholder="山海经AI纪录片|https://v.douyin.com/xxxxx&#10;https://v.douyin.com/yyyyy"></textarea>
+        <label>作品列表（每行一个，格式：作品名|链接|点赞数|发布时间）</label>
+        <textarea id="mLinks" placeholder="山海经AI纪录片|https://v.douyin.com/xxxxx|255万|2026-03-15&#10;月光宝盒|https://v.douyin.com/yyyyy|120万|2026-03-20"></textarea>
       </div>
       <div class="form-group">
         <label>备注 / 历史高赞记录 / 追踪日志</label>
@@ -340,53 +340,53 @@
 // ========== Initial Data ==========
 let creators = [
   // ===== 抖音 - AI人文类 =====
-  { id:1, name:"AI疯人院（冯彬）", account:"98969694", platform:"抖音", category:"AI纪实类", fans:"40.5万", fansNum:405000, tier:"中腰部", position:"AI纪录片创作者，复原古籍神话", links:[{name:"山海经AI纪录片",url:"https://www.douyin.com/search/冯彬山海经第一篇"},{name:"西游记AI短片",url:"https://news.qq.com/rain/a/20240220A04Y4400"}], notes:"前游戏技术美术，15年行业经验；ChatGPT+Midjourney+可灵/即梦/Vidu；全网播放量近亿，B站热门榜首。高赞：山海经系列", status:"追踪中", createdAt:"2026-04-22" },
-  { id:2, name:"大圆镜科普", account:"94738653271", platform:"抖音", category:"AI人文类", fans:"40.2万", fansNum:402000, tier:"中腰部", position:"AIGC科学史科普，天桥脑科学研究院", links:[{name:"生命科学简史",url:"https://www.douyin.com/user/94738653271"}], notes:"半年涨粉超200万，总播放量超3.5亿。抖音精选官方评价\"用AIGC把科学史拍成科幻大片\"。高赞：人体免疫系统、死亡边界", status:"追踪中", createdAt:"2026-04-22" },
+  { id:1, name:"AI疯人院（冯彬）", account:"98969694", platform:"抖音", category:"AI纪实类", fans:"40.5万", fansNum:405000, tier:"中腰部", position:"AI纪录片创作者，复原古籍神话", links:[{name:"山海经AI纪录片",url:"https://www.douyin.com/search/冯彬山海经第一篇",likes:"",date:""},{name:"西游记AI短片",url:"https://news.qq.com/rain/a/20240220A04Y4400",likes:"",date:""}], notes:"前游戏技术美术，15年行业经验；ChatGPT+Midjourney+可灵/即梦/Vidu；全网播放量近亿，B站热门榜首。高赞：山海经系列", status:"追踪中", createdAt:"2026-04-22" },
+  { id:2, name:"大圆镜科普", account:"94738653271", platform:"抖音", category:"AI人文类", fans:"40.2万", fansNum:402000, tier:"中腰部", position:"AIGC科学史科普，天桥脑科学研究院", links:[{name:"生命科学简史",url:"https://www.douyin.com/user/94738653271",likes:"",date:""}], notes:"半年涨粉超200万，总播放量超3.5亿。抖音精选官方评价\"用AIGC把科学史拍成科幻大片\"。高赞：人体免疫系统、死亡边界", status:"追踪中", createdAt:"2026-04-22" },
   { id:3, name:"AI海公子", account:"未公开", platform:"抖音", category:"AI人文类", fans:"22.2万", fansNum:222000, tier:"中腰部", position:"AI历史人物解说，中国古代史", links:[], notes:"左宗棠收复新疆系列、刘邦传奇一生、刘裕寄奴逆袭。用AI生成历史画面配合解说", status:"追踪中", createdAt:"2026-04-22" },
-  { id:4, name:"X柠檬星", account:"未公开", platform:"抖音", category:"AI人文类", fans:"2.7万", fansNum:27000, tier:"尾部", position:"AI历史社会分析，制度演变", links:[{name:"革命的终点却是背叛",url:"https://www.douyin.com/search/X柠檬星"}], notes:"单条获赞26.8万+。内容涉及中国历史制度演变、社会结构，风格偏学术深度。成长型账号", status:"追踪中", createdAt:"2026-04-22" },
-  { id:5, name:"秋芝2046", account:"未公开", platform:"抖音", category:"AI人文类", fans:"100.3万", fansNum:1003000, tier:"中腰部", position:"AI工具应用/AI人文科技", links:[{name:"DeepSeek实用技巧",url:"https://www.douyin.com/search/秋芝2046"}], notes:"入选2025年度100条必看知识作品。女性AI创作者，专注AI科技实用技巧，全网超百万粉丝", status:"追踪中", createdAt:"2026-04-22" },
+  { id:4, name:"X柠檬星", account:"未公开", platform:"抖音", category:"AI人文类", fans:"2.7万", fansNum:27000, tier:"尾部", position:"AI历史社会分析，制度演变", links:[{name:"革命的终点却是背叛",url:"https://www.douyin.com/search/X柠檬星",likes:"",date:""}], notes:"单条获赞26.8万+。内容涉及中国历史制度演变、社会结构，风格偏学术深度。成长型账号", status:"追踪中", createdAt:"2026-04-22" },
+  { id:5, name:"秋芝2046", account:"未公开", platform:"抖音", category:"AI人文类", fans:"100.3万", fansNum:1003000, tier:"中腰部", position:"AI工具应用/AI人文科技", links:[{name:"DeepSeek实用技巧",url:"https://www.douyin.com/search/秋芝2046",likes:"",date:""}], notes:"入选2025年度100条必看知识作品。女性AI创作者，专注AI科技实用技巧，全网超百万粉丝", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== 抖音 - AI纪实类 =====
-  { id:6, name:"野生布里茨", account:"未公开", platform:"抖音", category:"AI纪实类", fans:"20.8万", fansNum:208000, tier:"尾部", position:"AI短片/电影级AI纪实", links:[{name:"月光宝盒",url:"https://www.douyin.com/search/野生布里茨"}], notes:"2026年3月起号，首条作品3000万播放、255万点赞。入选抖音精选3月榜单、未来导演扶持计划。叙事完整度像电影纪录片", status:"追踪中", createdAt:"2026-04-22" },
-  { id:7, name:"奔放的小豆豆", account:"D16510008", platform:"抖音", category:"AI纪实类", fans:"530万", fansNum:5300000, tier:"头部", position:"地图沙盘+影像解说，硬核历史", links:[{name:"二战简史",url:"https://www.douyin.com/search/奔放的小豆豆"}], notes:"抖音精选创作者。80分钟二战简史、4小时局部抗战还原、抗美援朝系列。530万粉丝追更硬核历史", status:"追踪中", createdAt:"2026-04-22" },
-  { id:8, name:"历史调研室", account:"5555684E", platform:"抖音", category:"AI纪实类", fans:"24.5万(抖音)", fansNum:245000, tier:"尾部", position:"文史深度纪实，B站为主", links:[{name:"B站主页",url:"https://space.bilibili.com/"}], notes:"B站500万+粉丝，抖音同步分发。内容以严谨历史调研为基础，文史类深度长视频", status:"追踪中", createdAt:"2026-04-22" },
+  { id:6, name:"野生布里茨", account:"未公开", platform:"抖音", category:"AI纪实类", fans:"20.8万", fansNum:208000, tier:"尾部", position:"AI短片/电影级AI纪实", links:[{name:"月光宝盒",url:"https://www.douyin.com/search/野生布里茨",likes:"",date:""}], notes:"2026年3月起号，首条作品3000万播放、255万点赞。入选抖音精选3月榜单、未来导演扶持计划。叙事完整度像电影纪录片", status:"追踪中", createdAt:"2026-04-22" },
+  { id:7, name:"奔放的小豆豆", account:"D16510008", platform:"抖音", category:"AI纪实类", fans:"530万", fansNum:5300000, tier:"头部", position:"地图沙盘+影像解说，硬核历史", links:[{name:"二战简史",url:"https://www.douyin.com/search/奔放的小豆豆",likes:"",date:""}], notes:"抖音精选创作者。80分钟二战简史、4小时局部抗战还原、抗美援朝系列。530万粉丝追更硬核历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:8, name:"历史调研室", account:"5555684E", platform:"抖音", category:"AI纪实类", fans:"24.5万(抖音)", fansNum:245000, tier:"尾部", position:"文史深度纪实，B站为主", links:[{name:"B站主页",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"B站500万+粉丝，抖音同步分发。内容以严谨历史调研为基础，文史类深度长视频", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== 抖音 - 人文纪实类 =====
-  { id:9, name:"山白", account:"shanbai2023", platform:"抖音", category:"人文纪实类", fans:"1642万", fansNum:16420000, tier:"头部", position:"非遗传承/乡村手工艺纪实", links:[{name:"龙泉青瓷",url:"https://www.douyin.com/search/山白"}], notes:"00后非遗传承人，2023年3月起号，获赞1.3亿。抖音人文社科榜榜首，一周涨粉59万+。叔侄两人拍乡间手艺", status:"追踪中", createdAt:"2026-04-22" },
-  { id:10, name:"南翔不爱吃饭", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"3018万", fansNum:30180000, tier:"头部", position:"非遗美食文化/古代菜色还原", links:[{name:"古代诗传菜色",url:"https://www.douyin.com/search/南翔不爱吃饭"}], notes:"抖音非遗创作者Top 10，92年生现居苏州。抖音精选3月榜单入选者。非遗短视频美学代表", status:"追踪中", createdAt:"2026-04-22" },
-  { id:11, name:"江寻千（九月）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"2236万", fansNum:22360000, tier:"头部", position:"非遗传统文化（京剧等）", links:[{name:"京剧非遗",url:"https://www.douyin.com/search/江寻千"}], notes:"被称为新生代李子柒，95后非遗创作者。2026抖音非遗创新发展趋势报告最受关注Top 10", status:"追踪中", createdAt:"2026-04-22" },
-  { id:12, name:"郝家豁", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"400万", fansNum:4000000, tier:"中腰部", position:"语文课本影视化还原", links:[{name:"孔乙己",url:"https://www.douyin.com/search/郝家豁"},{name:"金色的鱼钩",url:"https://www.douyin.com/search/郝家豁"}], notes:"00后非专业团队，电话销售+应届大学生。播放量过亿。#那些意难平的语文课文 累计播放超5.5亿。入选青年创作者成长计划", status:"追踪中", createdAt:"2026-04-22" },
-  { id:13, name:"李蠕蠕", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"249万", fansNum:2490000, tier:"中腰部", position:"年轻人情绪与深度思考", links:[{name:"蠕蠕想第一",url:"https://www.douyin.com/search/李蠕蠕"}], notes:"抖音精选3月榜单入选。镜头里藏着当代年轻人的情绪出口，深度思考也能获得流量", status:"追踪中", createdAt:"2026-04-22" },
+  { id:9, name:"山白", account:"shanbai2023", platform:"抖音", category:"人文纪实类", fans:"1642万", fansNum:16420000, tier:"头部", position:"非遗传承/乡村手工艺纪实", links:[{name:"龙泉青瓷",url:"https://www.douyin.com/search/山白",likes:"",date:""}], notes:"00后非遗传承人，2023年3月起号，获赞1.3亿。抖音人文社科榜榜首，一周涨粉59万+。叔侄两人拍乡间手艺", status:"追踪中", createdAt:"2026-04-22" },
+  { id:10, name:"南翔不爱吃饭", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"3018万", fansNum:30180000, tier:"头部", position:"非遗美食文化/古代菜色还原", links:[{name:"古代诗传菜色",url:"https://www.douyin.com/search/南翔不爱吃饭",likes:"",date:""}], notes:"抖音非遗创作者Top 10，92年生现居苏州。抖音精选3月榜单入选者。非遗短视频美学代表", status:"追踪中", createdAt:"2026-04-22" },
+  { id:11, name:"江寻千（九月）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"2236万", fansNum:22360000, tier:"头部", position:"非遗传统文化（京剧等）", links:[{name:"京剧非遗",url:"https://www.douyin.com/search/江寻千",likes:"",date:""}], notes:"被称为新生代李子柒，95后非遗创作者。2026抖音非遗创新发展趋势报告最受关注Top 10", status:"追踪中", createdAt:"2026-04-22" },
+  { id:12, name:"郝家豁", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"400万", fansNum:4000000, tier:"中腰部", position:"语文课本影视化还原", links:[{name:"孔乙己",url:"https://www.douyin.com/search/郝家豁",likes:"",date:""},{name:"金色的鱼钩",url:"https://www.douyin.com/search/郝家豁",likes:"",date:""}], notes:"00后非专业团队，电话销售+应届大学生。播放量过亿。#那些意难平的语文课文 累计播放超5.5亿。入选青年创作者成长计划", status:"追踪中", createdAt:"2026-04-22" },
+  { id:13, name:"李蠕蠕", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"249万", fansNum:2490000, tier:"中腰部", position:"年轻人情绪与深度思考", links:[{name:"蠕蠕想第一",url:"https://www.douyin.com/search/李蠕蠕",likes:"",date:""}], notes:"抖音精选3月榜单入选。镜头里藏着当代年轻人的情绪出口，深度思考也能获得流量", status:"追踪中", createdAt:"2026-04-22" },
   { id:14, name:"康呦喂", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"181.9万", fansNum:1819000, tier:"中腰部", position:"跨文化纪实探访", links:[], notes:"用纪实镜头搭建跨文化交流桥梁，抖音精选月榜入选创作者", status:"追踪中", createdAt:"2026-04-22" },
-  { id:15, name:"彭南科", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"700万", fansNum:7000000, tier:"中腰部", position:"非遗复刻/服装", links:[{name:"非遗服装复刻",url:"https://www.douyin.com/search/彭南科"}], notes:"12天涨粉250万，52条视频累积256万粉丝。快速增长的非遗类创作者", status:"追踪中", createdAt:"2026-04-22" },
-  { id:16, name:"李程远不远", account:"lichengyuans", platform:"抖音", category:"人文纪实类", fans:"214.8万", fansNum:2148000, tier:"中腰部", position:"纪录片导演，青年成长", links:[{name:"三十而立",url:"https://www.sohu.com/a/427988996_688642"}], notes:"光线传媒视频部总监出身，获赞4613.2万+。专业纪录片背景，电影质感与社会洞察", status:"追踪中", createdAt:"2026-04-22" },
-  { id:17, name:"大圣探世界", account:"91666624839", platform:"抖音", category:"人文纪实类", fans:"86.3万", fansNum:863000, tier:"中腰部", position:"探险/原始部落/人文地理", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAX7e791glfS6Ud2f9Y5gFqczv5szyCTWrW1UUcMDh40ZT94V2YvkXuc_f6yRFVU1d"}], notes:"实地探访+纪录片式解说。非洲哈扎比部落、食人族、印度贫民窟等边缘人群", status:"追踪中", createdAt:"2026-04-22" },
-  { id:18, name:"虫洞行者", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"8797", fansNum:8797, tier:"尾部", position:"历史纪录片，中国历史地理", links:[{name:"台湾岛纪EP01",url:"https://www.douyin.com/video/7609524336466119979"},{name:"台湾岛纪EP02",url:"https://www.douyin.com/video/7609632727964519699"}], notes:"未来导演扶持计划、人文星闪耀计划入选。00后团队，纯AI手搓+实景史料", status:"追踪中", createdAt:"2026-04-22" },
-  { id:19, name:"大楚狐狸嗷", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"50-100万", fansNum:750000, tier:"中腰部", position:"先秦历史/民俗/文学", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAIQgXtd_KmQPwz9b5_o0giJ8l7lB8JZV9xdS5JBSClN4"}], notes:"深度考据夏商周文明，学术性与传播性兼具。人文星闪耀计划入选。夏商周汉服发展史、先秦凤凰/龙起源", status:"追踪中", createdAt:"2026-04-22" },
-  { id:20, name:"米三汉", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"500万", fansNum:5000000, tier:"头部", position:"古典文学超长解读", links:[{name:"450分钟红楼梦",url:"https://www.cqnews.net/1/detail/1296352383730384896/app/content_1296352383730384896.html"}], notes:"95后，湖北大学环艺专业。450分钟红楼梦播放量逾3亿，获赞1200万。降低古典名著阅读门槛", status:"追踪中", createdAt:"2026-04-22" },
-  { id:21, name:"一方见地（璐璟）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"868万", fansNum:8680000, tier:"头部", position:"植物科普/自然人文纪录片", links:[{name:"深度解析",url:"https://www.niaogebiji.com/article-693347-1.html"}], notes:"与惠东共同创作，3年522个植物视频。植物科普领域顶流。桂花香系列为代表", status:"追踪中", createdAt:"2026-04-22" },
-  { id:22, name:"北京青年x壹次访谈录", account:"bjqn", platform:"抖音", category:"人文纪实类", fans:"579.5万", fansNum:5795000, tier:"头部", position:"人物访谈纪实", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAxWbA1zgjTJEVP8YISawogz86lwTIhqNOZAPLw_8Mygc"}], notes:"人物深度访谈，获赞6130万+。头部访谈纪实账号", status:"追踪中", createdAt:"2026-04-22" },
+  { id:15, name:"彭南科", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"700万", fansNum:7000000, tier:"中腰部", position:"非遗复刻/服装", links:[{name:"非遗服装复刻",url:"https://www.douyin.com/search/彭南科",likes:"",date:""}], notes:"12天涨粉250万，52条视频累积256万粉丝。快速增长的非遗类创作者", status:"追踪中", createdAt:"2026-04-22" },
+  { id:16, name:"李程远不远", account:"lichengyuans", platform:"抖音", category:"人文纪实类", fans:"214.8万", fansNum:2148000, tier:"中腰部", position:"纪录片导演，青年成长", links:[{name:"三十而立",url:"https://www.sohu.com/a/427988996_688642",likes:"",date:""}], notes:"光线传媒视频部总监出身，获赞4613.2万+。专业纪录片背景，电影质感与社会洞察", status:"追踪中", createdAt:"2026-04-22" },
+  { id:17, name:"大圣探世界", account:"91666624839", platform:"抖音", category:"人文纪实类", fans:"86.3万", fansNum:863000, tier:"中腰部", position:"探险/原始部落/人文地理", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAX7e791glfS6Ud2f9Y5gFqczv5szyCTWrW1UUcMDh40ZT94V2YvkXuc_f6yRFVU1d",likes:"",date:""}], notes:"实地探访+纪录片式解说。非洲哈扎比部落、食人族、印度贫民窟等边缘人群", status:"追踪中", createdAt:"2026-04-22" },
+  { id:18, name:"虫洞行者", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"8797", fansNum:8797, tier:"尾部", position:"历史纪录片，中国历史地理", links:[{name:"台湾岛纪EP01",url:"https://www.douyin.com/video/7609524336466119979",likes:"",date:""},{name:"台湾岛纪EP02",url:"https://www.douyin.com/video/7609632727964519699",likes:"",date:""}], notes:"未来导演扶持计划、人文星闪耀计划入选。00后团队，纯AI手搓+实景史料", status:"追踪中", createdAt:"2026-04-22" },
+  { id:19, name:"大楚狐狸嗷", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"50-100万", fansNum:750000, tier:"中腰部", position:"先秦历史/民俗/文学", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAIQgXtd_KmQPwz9b5_o0giJ8l7lB8JZV9xdS5JBSClN4",likes:"",date:""}], notes:"深度考据夏商周文明，学术性与传播性兼具。人文星闪耀计划入选。夏商周汉服发展史、先秦凤凰/龙起源", status:"追踪中", createdAt:"2026-04-22" },
+  { id:20, name:"米三汉", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"500万", fansNum:5000000, tier:"头部", position:"古典文学超长解读", links:[{name:"450分钟红楼梦",url:"https://www.cqnews.net/1/detail/1296352383730384896/app/content_1296352383730384896.html",likes:"",date:""}], notes:"95后，湖北大学环艺专业。450分钟红楼梦播放量逾3亿，获赞1200万。降低古典名著阅读门槛", status:"追踪中", createdAt:"2026-04-22" },
+  { id:21, name:"一方见地（璐璟）", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"868万", fansNum:8680000, tier:"头部", position:"植物科普/自然人文纪录片", links:[{name:"深度解析",url:"https://www.niaogebiji.com/article-693347-1.html",likes:"",date:""}], notes:"与惠东共同创作，3年522个植物视频。植物科普领域顶流。桂花香系列为代表", status:"追踪中", createdAt:"2026-04-22" },
+  { id:22, name:"北京青年x壹次访谈录", account:"bjqn", platform:"抖音", category:"人文纪实类", fans:"579.5万", fansNum:5795000, tier:"头部", position:"人物访谈纪实", links:[{name:"抖音主页",url:"https://www.douyin.com/user/MS4wLjABAAAAxWbA1zgjTJEVP8YISawogz86lwTIhqNOZAPLw_8Mygc",likes:"",date:""}], notes:"人物深度访谈，获赞6130万+。头部访谈纪实账号", status:"追踪中", createdAt:"2026-04-22" },
   { id:23, name:"武志红", account:"未公开", platform:"抖音", category:"人文纪实类", fans:"230万", fansNum:2300000, tier:"头部", position:"心理现象分析/人文", links:[], notes:"心理现象分析系列。抖音头部心理学/人文知识创作者", status:"追踪中", createdAt:"2026-04-22" },
-  { id:24, name:"混子哥边画边讲", account:"未公开", platform:"抖音", category:"AI人文类", fans:"1649.5万", fansNum:16495000, tier:"头部", position:"手绘+AI辅助历史文化科普", links:[{name:"边画边讲系列",url:"https://www.douyin.com/search/混子哥边画边讲"}], notes:"混知品牌创始人陈磊。两个月涨粉千万，全网半年2500万+。入选2025年度100条必看知识作品", status:"追踪中", createdAt:"2026-04-22" },
+  { id:24, name:"混子哥边画边讲", account:"未公开", platform:"抖音", category:"AI人文类", fans:"1649.5万", fansNum:16495000, tier:"头部", position:"手绘+AI辅助历史文化科普", links:[{name:"边画边讲系列",url:"https://www.douyin.com/search/混子哥边画边讲",likes:"",date:""}], notes:"混知品牌创始人陈磊。两个月涨粉千万，全网半年2500万+。入选2025年度100条必看知识作品", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== B站 - AI人文类 =====
-  { id:25, name:"AI疯人院（冯彬）", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"20.9万", fansNum:209000, tier:"中腰部", position:"AI纪录片创作者", links:[{name:"山海经B站",url:"https://space.bilibili.com/"}], notes:"B站《山海经》系列上线5小时进热门榜。与抖音同创作者分发", status:"追踪中", createdAt:"2026-04-22" },
+  { id:25, name:"AI疯人院（冯彬）", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"20.9万", fansNum:209000, tier:"中腰部", position:"AI纪录片创作者", links:[{name:"山海经B站",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"B站《山海经》系列上线5小时进热门榜。与抖音同创作者分发", status:"追踪中", createdAt:"2026-04-22" },
   { id:26, name:"大圆镜科普", account:"B站同名", platform:"B站", category:"AI人文类", fans:"120万", fansNum:1200000, tier:"中腰部", position:"AIGC科学史科普", links:[], notes:"天桥脑科学研究院孵化，B站同步分发科学史AI大片", status:"追踪中", createdAt:"2026-04-22" },
-  { id:27, name:"言川导演AItips", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"垂类新锐", fansNum:50000, tier:"中腰部", position:"AI电影导演", links:[{name:"异影者",url:"https://www.bilibili.com/search?keyword=言川导演"}], notes:"戛纳科幻电影国际AI银奖、北影节AIGC奖项。国内北影上影双获AIGC单元奖项", status:"追踪中", createdAt:"2026-04-22" },
-  { id:28, name:"秋芝2046", account:"B站同名", platform:"B站", category:"AI人文类", fans:"85.6万", fansNum:856000, tier:"中腰部", position:"AI工具+人文科技", links:[{name:"DeepSeek技巧",url:"https://search.bilibili.com/all?keyword=秋芝2046"}], notes:"B站+抖音合计超百万。2025年度必看知识作品入选", status:"追踪中", createdAt:"2026-04-22" },
+  { id:27, name:"言川导演AItips", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"垂类新锐", fansNum:50000, tier:"中腰部", position:"AI电影导演", links:[{name:"异影者",url:"https://www.bilibili.com/search?keyword=言川导演",likes:"",date:""}], notes:"戛纳科幻电影国际AI银奖、北影节AIGC奖项。国内北影上影双获AIGC单元奖项", status:"追踪中", createdAt:"2026-04-22" },
+  { id:28, name:"秋芝2046", account:"B站同名", platform:"B站", category:"AI人文类", fans:"85.6万", fansNum:856000, tier:"中腰部", position:"AI工具+人文科技", links:[{name:"DeepSeek技巧",url:"https://search.bilibili.com/all?keyword=秋芝2046",likes:"",date:""}], notes:"B站+抖音合计超百万。2025年度必看知识作品入选", status:"追踪中", createdAt:"2026-04-22" },
   { id:29, name:"数字生命卡兹克", account:"B站同名", platform:"B站", category:"AI人文类", fans:"1.2万", fansNum:12000, tier:"中腰部", position:"AI深度解析+人文思辨", links:[], notes:"2025年度影响力AI博主。AI产品测评与人文反思，公众号同名", status:"追踪中", createdAt:"2026-04-22" },
   { id:30, name:"未来设计师KiK", account:"B站同名", platform:"B站", category:"AI人文类", fans:"1.3万", fansNum:13000, tier:"中腰部", position:"AI数字艺术+文化创意", links:[], notes:"8年资深设计师，新榜小红书AI账号日榜常驻前列。AI绘画/视频/工具测评", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== B站 - AI纪实类 =====
-  { id:31, name:"野生布里茨", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"数万", fansNum:50000, tier:"尾部", position:"AI短片/电影级纪实", links:[{name:"月光宝盒",url:"https://search.bilibili.com/all?keyword=野生布里茨"}], notes:"B站同步分发，首条视频电影级质感", status:"追踪中", createdAt:"2026-04-22" },
-  { id:32, name:"历史调研室", account:"B站:历史调研室", platform:"B站", category:"AI纪实类", fans:"707.5万", fansNum:7075000, tier:"头部", position:"文史深度纪实", links:[{name:"B站主页",url:"https://space.bilibili.com/"}], notes:"B站核心阵地，文史类深度长视频顶流。严谨历史调研风格", status:"追踪中", createdAt:"2026-04-22" },
-  { id:33, name:"赖导AboutLai", account:"B站:AboutLai", platform:"B站", category:"人文纪实类", fans:"121.2万", fansNum:1212000, tier:"头部", position:"人文纪实/地域影像", links:[{name:"三峡纪实",url:"https://search.bilibili.com/all?keyword=赖导AboutLai"}], notes:"B站百大UP主，首次百大（2025）。电影级运镜记录三峡、秦岭。人文纪实领域标杆", status:"追踪中", createdAt:"2026-04-22" },
-  { id:34, name:"食贫道", account:"B站:食贫道", platform:"B站", category:"人文纪实类", fans:"927.6万", fansNum:9276000, tier:"头部", position:"人文美食纪录片", links:[{name:"迷失东京",url:"https://space.bilibili.com/"}], notes:"B站唯一靠纪录片营收千万的UP主。饼叔（张竣）前战地记者出身，5小时人文纪录片", status:"追踪中", createdAt:"2026-04-22" },
+  { id:31, name:"野生布里茨", account:"B站同名", platform:"B站", category:"AI纪实类", fans:"数万", fansNum:50000, tier:"尾部", position:"AI短片/电影级纪实", links:[{name:"月光宝盒",url:"https://search.bilibili.com/all?keyword=野生布里茨",likes:"",date:""}], notes:"B站同步分发，首条视频电影级质感", status:"追踪中", createdAt:"2026-04-22" },
+  { id:32, name:"历史调研室", account:"B站:历史调研室", platform:"B站", category:"AI纪实类", fans:"707.5万", fansNum:7075000, tier:"头部", position:"文史深度纪实", links:[{name:"B站主页",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"B站核心阵地，文史类深度长视频顶流。严谨历史调研风格", status:"追踪中", createdAt:"2026-04-22" },
+  { id:33, name:"赖导AboutLai", account:"B站:AboutLai", platform:"B站", category:"人文纪实类", fans:"121.2万", fansNum:1212000, tier:"头部", position:"人文纪实/地域影像", links:[{name:"三峡纪实",url:"https://search.bilibili.com/all?keyword=赖导AboutLai",likes:"",date:""}], notes:"B站百大UP主，首次百大（2025）。电影级运镜记录三峡、秦岭。人文纪实领域标杆", status:"追踪中", createdAt:"2026-04-22" },
+  { id:34, name:"食贫道", account:"B站:食贫道", platform:"B站", category:"人文纪实类", fans:"927.6万", fansNum:9276000, tier:"头部", position:"人文美食纪录片", links:[{name:"迷失东京",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"B站唯一靠纪录片营收千万的UP主。饼叔（张竣）前战地记者出身，5小时人文纪录片", status:"追踪中", createdAt:"2026-04-22" },
   { id:35, name:"电影最TOP", account:"B站:电影最TOP", platform:"B站", category:"人文纪实类", fans:"609.4万", fansNum:6094000, tier:"头部", position:"电影人文解读/纪实风格", links:[], notes:"电影解读领域头部UP主，具有人文深度和纪实风格的影片分析", status:"追踪中", createdAt:"2026-04-22" },
   { id:36, name:"一条视频", account:"B站:一条视频", platform:"B站", category:"人文纪实类", fans:"500万+", fansNum:5000000, tier:"头部", position:"生活美学/人文纪录片", links:[], notes:"记录中国人日常生活美学，纪录片式呈现", status:"追踪中", createdAt:"2026-04-22" },
   { id:37, name:"大象放映室", account:"B站:大象放映室", platform:"B站", category:"人文纪实类", fans:"508.8万", fansNum:5088000, tier:"头部", position:"时代人物纪实", links:[], notes:"《激荡四十年》系列为代表，用纪录片手法讲述中国改革开放历程", status:"追踪中", createdAt:"2026-04-22" },
-  { id:38, name:"智能路障", account:"B站:智能路障", platform:"B站", category:"AI人文类", fans:"420.6万", fansNum:4206000, tier:"头部", position:"游戏人文/鲁迅解读", links:[{name:"鲁迅系列",url:"https://space.bilibili.com/"}], notes:"鲁迅解读系列破圈，游戏区最具人文深度的UP主之一", status:"追踪中", createdAt:"2026-04-22" },
-  { id:39, name:"小约翰可汗", account:"B站:小约翰可汗", platform:"B站", category:"人文纪实类", fans:"1066.8万", fansNum:10668000, tier:"头部", position:"小国历史纪实/硬核人文", links:[{name:"奇葩小国",url:"https://space.bilibili.com/"}], notes:"B站顶流知识UP主。奇葩小国系列、硬核狠人系列，用幽默方式讲述冷门国家历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:38, name:"智能路障", account:"B站:智能路障", platform:"B站", category:"AI人文类", fans:"420.6万", fansNum:4206000, tier:"头部", position:"游戏人文/鲁迅解读", links:[{name:"鲁迅系列",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"鲁迅解读系列破圈，游戏区最具人文深度的UP主之一", status:"追踪中", createdAt:"2026-04-22" },
+  { id:39, name:"小约翰可汗", account:"B站:小约翰可汗", platform:"B站", category:"人文纪实类", fans:"1066.8万", fansNum:10668000, tier:"头部", position:"小国历史纪实/硬核人文", links:[{name:"奇葩小国",url:"https://space.bilibili.com/",likes:"",date:""}], notes:"B站顶流知识UP主。奇葩小国系列、硬核狠人系列，用幽默方式讲述冷门国家历史", status:"追踪中", createdAt:"2026-04-22" },
   { id:40, name:"渤海小吏", account:"B站:渤海小吏", platform:"B站", category:"人文纪实类", fans:"419.4万", fansNum:4194000, tier:"头部", position:"历史战争纪实", links:[], notes:"历史战争深度解读，楚汉争霸、三国等系列。史记+实战推演风格", status:"追踪中", createdAt:"2026-04-22" },
   { id:41, name:"安州牧", account:"B站:安州牧", platform:"B站", category:"人文纪实类", fans:"248.1万", fansNum:2481000, tier:"中腰部", position:"中国历史地图推演", links:[], notes:"《中国通史》系列地图推演，用地图动画讲述中国历史变迁", status:"追踪中", createdAt:"2026-04-22" },
   { id:42, name:"冲浪普拉斯", account:"B站:冲浪普拉斯", platform:"B站", category:"人文纪实类", fans:"162.1万", fansNum:1621000, tier:"中腰部", position:"商业人文纪实", links:[], notes:"中国互联网商业史、企业兴衰纪实。深度商业人文内容", status:"追踪中", createdAt:"2026-04-22" },
@@ -394,22 +394,22 @@ let creators = [
   { id:44, name:"周二叭", account:"B站:周二叭", platform:"B站", category:"人文纪实类", fans:"数十万", fansNum:300000, tier:"中腰部", position:"社会纪实/边缘人群", links:[], notes:"关注社会边缘群体，用纪录片式手法记录普通人故事", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== 小红书 - AI人文类 =====
-  { id:45, name:"秋芝2046", account:"秋芝2046", platform:"小红书", category:"AI人文类", fans:"33.2万", fansNum:332000, tier:"中腰部", position:"AI科技+人文思考", links:[{name:"DeepSeek实战技巧",url:"https://www.xiaohongshu.com/search_result?keyword=秋芝2046"}], notes:"签名\"AI很单纯，复杂的是人\"。全网130万+，小红书为主要阵地之一", status:"追踪中", createdAt:"2026-04-22" },
+  { id:45, name:"秋芝2046", account:"秋芝2046", platform:"小红书", category:"AI人文类", fans:"33.2万", fansNum:332000, tier:"中腰部", position:"AI科技+人文思考", links:[{name:"DeepSeek实战技巧",url:"https://www.xiaohongshu.com/search_result?keyword=秋芝2046",likes:"",date:""}], notes:"签名\"AI很单纯，复杂的是人\"。全网130万+，小红书为主要阵地之一", status:"追踪中", createdAt:"2026-04-22" },
   { id:46, name:"数字生命卡兹克", account:"数字生命卡兹克", platform:"小红书", category:"AI人文类", fans:"7.8万", fansNum:78000, tier:"中腰部", position:"AI深度解析+人文思辨", links:[], notes:"2025年度影响力AI博主。公众号同名，小红书为辅助平台", status:"追踪中", createdAt:"2026-04-22" },
   { id:47, name:"未来设计师KiK", account:"未来设计师KiK", platform:"小红书", category:"AI人文类", fans:"17万", fansNum:170000, tier:"中腰部", position:"AI数字艺术+文化创意", links:[], notes:"8年资深设计师，新榜小红书AI账号日榜常驻前列", status:"追踪中", createdAt:"2026-04-22" },
   { id:48, name:"翎_Ling", account:"翎_Ling", platform:"小红书", category:"AI人文类", fans:"1.5万", fansNum:15000, tier:"尾部", position:"AI虚拟人+国风文化", links:[], notes:"超写实国风虚拟KOL，魔珐科技旗下。与宝格丽、特斯拉等品牌合作", status:"追踪中", createdAt:"2026-04-22" },
   { id:49, name:"李美人", account:"李美人", platform:"小红书", category:"AI人文类", fans:"未找到", fansNum:0, tier:"尾部", position:"AI历史人物传记视频", links:[], notes:"用AI生成\"历史人物的一生\"系列视频。2个月涨粉51万（主要在抖音）", status:"追踪中", createdAt:"2026-04-22" },
 
   // ===== 小红书 - 人文纪实类 =====
-  { id:50, name:"李子柒", account:"李子柒", platform:"小红书", category:"人文纪实类", fans:"492万", fansNum:4920000, tier:"头部", position:"田园生活+非遗文化纪实", links:[{name:"雕漆隐花",url:"https://www.xiaohongshu.com/search_result?keyword=李子柒"}], notes:"2024回归当日涨粉75万。全网顶流人文纪实创作者，非遗文化出海标杆", status:"追踪中", createdAt:"2026-04-22" },
-  { id:51, name:"房琪kiki", account:"房琪kiki", platform:"小红书", category:"人文纪实类", fans:"325.5万", fansNum:3255000, tier:"头部", position:"人文旅行纪实", links:[{name:"旅行人文",url:"https://www.xiaohongshu.com/search_result?keyword=房琪kiki"}], notes:"抖音2334万粉丝，小红书千瓜数据排名第一。人文感悟式旅行内容", status:"追踪中", createdAt:"2026-04-22" },
-  { id:52, name:"混子哥边画边讲", account:"混子哥边画边讲", platform:"小红书", category:"AI人文类", fans:"191.8万", fansNum:1918000, tier:"中腰部", position:"历史文化科普漫画", links:[{name:"混知系列",url:"https://www.xiaohongshu.com/search_result?keyword=混子哥边画边讲"}], notes:"全网半年涨粉2500万+，小红书涨粉50万+。用漫画科普历史", status:"追踪中", createdAt:"2026-04-22" },
-  { id:53, name:"意公子", account:"意公子", platform:"小红书", category:"人文纪实类", fans:"133.7万", fansNum:1337000, tier:"中腰部", position:"艺术人文科普", links:[{name:"大话中国艺术史",url:"https://www.xiaohongshu.com/search_result?keyword=意公子"}], notes:"苏东坡等人物短视频播放破亿。《大话中国艺术史》作者，飞博共创MCN", status:"追踪中", createdAt:"2026-04-22" },
+  { id:50, name:"李子柒", account:"李子柒", platform:"小红书", category:"人文纪实类", fans:"492万", fansNum:4920000, tier:"头部", position:"田园生活+非遗文化纪实", links:[{name:"雕漆隐花",url:"https://www.xiaohongshu.com/search_result?keyword=李子柒",likes:"",date:""}], notes:"2024回归当日涨粉75万。全网顶流人文纪实创作者，非遗文化出海标杆", status:"追踪中", createdAt:"2026-04-22" },
+  { id:51, name:"房琪kiki", account:"房琪kiki", platform:"小红书", category:"人文纪实类", fans:"325.5万", fansNum:3255000, tier:"头部", position:"人文旅行纪实", links:[{name:"旅行人文",url:"https://www.xiaohongshu.com/search_result?keyword=房琪kiki",likes:"",date:""}], notes:"抖音2334万粉丝，小红书千瓜数据排名第一。人文感悟式旅行内容", status:"追踪中", createdAt:"2026-04-22" },
+  { id:52, name:"混子哥边画边讲", account:"混子哥边画边讲", platform:"小红书", category:"AI人文类", fans:"191.8万", fansNum:1918000, tier:"中腰部", position:"历史文化科普漫画", links:[{name:"混知系列",url:"https://www.xiaohongshu.com/search_result?keyword=混子哥边画边讲",likes:"",date:""}], notes:"全网半年涨粉2500万+，小红书涨粉50万+。用漫画科普历史", status:"追踪中", createdAt:"2026-04-22" },
+  { id:53, name:"意公子", account:"意公子", platform:"小红书", category:"人文纪实类", fans:"133.7万", fansNum:1337000, tier:"中腰部", position:"艺术人文科普", links:[{name:"大话中国艺术史",url:"https://www.xiaohongshu.com/search_result?keyword=意公子",likes:"",date:""}], notes:"苏东坡等人物短视频播放破亿。《大话中国艺术史》作者，飞博共创MCN", status:"追踪中", createdAt:"2026-04-22" },
   { id:54, name:"马骏达Mars", account:"马骏达Mars", platform:"小红书", category:"人文纪实类", fans:"38.4万", fansNum:384000, tier:"中腰部", position:"中国古建筑与园林科普", links:[], notes:"2024小红书涨粉TOP500。专心科普中国古建筑及园林知识，纪实风格", status:"追踪中", createdAt:"2026-04-22" },
-  { id:55, name:"国翠儿", account:"国翠儿", platform:"小红书", category:"人文纪实类", fans:"53.3万", fansNum:533000, tier:"中腰部", position:"中国传统文化纪实科普", links:[{name:"60秒了解北京中轴线",url:"https://www.xiaohongshu.com/search_result?keyword=国翠儿"}], notes:"结合技术流讲解中国传统文化，抖音精选推荐", status:"追踪中", createdAt:"2026-04-22" },
+  { id:55, name:"国翠儿", account:"国翠儿", platform:"小红书", category:"人文纪实类", fans:"53.3万", fansNum:533000, tier:"中腰部", position:"中国传统文化纪实科普", links:[{name:"60秒了解北京中轴线",url:"https://www.xiaohongshu.com/search_result?keyword=国翠儿",likes:"",date:""}], notes:"结合技术流讲解中国传统文化，抖音精选推荐", status:"追踪中", createdAt:"2026-04-22" },
   { id:56, name:"山白", account:"山白", platform:"小红书", category:"人文纪实类", fans:"146.9万", fansNum:1469000, tier:"中腰部", position:"传统文化+生活纪实", links:[], notes:"00后创作者，2024小红书涨粉TOP500。传统文化元素融入纪实内容", status:"追踪中", createdAt:"2026-04-22" },
   { id:57, name:"南翔不爱吃饭", account:"南翔不爱吃饭", platform:"小红书", category:"人文纪实类", fans:"404.6万", fansNum:4046000, tier:"中腰部", position:"传统文化纪实", links:[], notes:"2024涨粉表现突出，以传统文化元素获得用户偏爱", status:"追踪中", createdAt:"2026-04-22" },
-  { id:58, name:"星球研究所", account:"星球研究所", platform:"小红书", category:"人文纪实类", fans:"117.7万", fansNum:1177000, tier:"中腰部", position:"自然地理+人文纪实", links:[{name:"地理科普",url:"https://www.xiaohongshu.com/search_result?keyword=星球研究所"}], notes:"中国地理科普顶流，纪实影像+深度图文。全网知名度极高", status:"追踪中", createdAt:"2026-04-22" },
+  { id:58, name:"星球研究所", account:"星球研究所", platform:"小红书", category:"人文纪实类", fans:"117.7万", fansNum:1177000, tier:"中腰部", position:"自然地理+人文纪实", links:[{name:"地理科普",url:"https://www.xiaohongshu.com/search_result?keyword=星球研究所",likes:"",date:""}], notes:"中国地理科普顶流，纪实影像+深度图文。全网知名度极高", status:"追踪中", createdAt:"2026-04-22" },
 ];
 
 let nextId = creators.length + 1;
@@ -475,7 +475,16 @@ function renderTable() {
     filtered.forEach(c => {
       const tr = document.createElement('tr');
       const linksHtml = c.links && c.links.length
-        ? `<div class="link-list">${c.links.map(l => `<a href="${l.url}" target="_blank">${l.name || l.url}</a>`).join('')}</div>`
+        ? `<div class="link-list">${c.links.map(l => {
+            const likesInfo = l.likes ? `<span style="color:#e11d48;font-size:11px;font-weight:600;">${l.likes}</span>` : '';
+            const dateInfo = l.date ? `<span style="color:#6b7280;font-size:11px;">${l.date}</span>` : '';
+            const meta = [likesInfo, dateInfo].filter(Boolean).join(' · ');
+            return `<div style="margin-bottom:6px;padding:6px 8px;background:#f9fafb;border-radius:6px;border:1px solid #e5e7eb;">
+              <div style="font-size:12px;font-weight:600;color:#111827;margin-bottom:2px;">${l.name || '未命名'}</div>
+              <a href="${l.url}" target="_blank" style="font-size:11px;color:#2563eb;word-break:break-all;">${l.url}</a>
+              ${meta ? `<div style="margin-top:3px;">${meta}</div>` : ''}
+            </div>`;
+          }).join('')}</div>`
         : '<span style="color:#9ca3af;font-size:12px;">—</span>';
       tr.innerHTML = `
         <td><strong>${c.name}</strong><br><span style="font-size:11px;color:#6b7280;">@${c.account || '—'}</span></td>
@@ -553,7 +562,10 @@ function editCreator(id) {
   document.getElementById('mTier').value = c.tier;
   document.getElementById('mStatus').value = c.status;
   document.getElementById('mPosition').value = c.position || '';
-  document.getElementById('mLinks').value = c.links.map(l => l.name ? `${l.name}|${l.url}` : l.url).join('\n');
+  document.getElementById('mLinks').value = c.links.map(l => {
+    const parts = [l.name || '', l.url || '', l.likes || '', l.date || ''];
+    return parts.join('|');
+  }).join('\n');
   document.getElementById('mNotes').value = c.notes || '';
   document.getElementById('modal').classList.add('active');
 }
@@ -566,9 +578,14 @@ function saveCreator() {
 
   const linksRaw = document.getElementById('mLinks').value.trim().split('\n').filter(Boolean);
   const links = linksRaw.map(line => {
-    if (line.includes('|')) { const [n,u] = line.split('|',2); return {name:n.trim(), url:u.trim()}; }
-    return {name:line.trim().substring(0,30)+(line.length>30?'...':''), url:line.trim()};
-  });
+    const parts = line.split('|').map(p => p.trim());
+    return {
+      name: parts[0] || '',
+      url: parts[1] || '',
+      likes: parts[2] || '',
+      date: parts[3] || ''
+    };
+  }).filter(l => l.url);
 
   const data = {
     id: idVal ? parseInt(idVal) : nextId++,
@@ -622,7 +639,7 @@ function importData() {
 renderTable();
 
 function exportExcel() {
-  const data = creators.map(c => ({
+  const mainData = creators.map(c => ({
     "创作者": c.name,
     "平台账号": c.account,
     "渠道": c.platform,
@@ -631,12 +648,29 @@ function exportExcel() {
     "体量": c.tier,
     "内容定位": c.position,
     "状态": c.status,
-    "作品链接": c.links.map(l => l.name + ": " + l.url).join("; "),
     "备注": c.notes
   }));
-  const ws = XLSX.utils.json_to_sheet(data);
+  const wsMain = XLSX.utils.json_to_sheet(mainData);
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "创作者清单");
+  XLSX.utils.book_append_sheet(wb, wsMain, "创作者清单");
+
+  const worksData = [];
+  creators.forEach(c => {
+    c.links.forEach(l => {
+      worksData.push({
+        "创作者": c.name,
+        "渠道": c.platform,
+        "作品名称": l.name,
+        "作品链接": l.url,
+        "点赞/数据": l.likes,
+        "发布时间": l.date
+      });
+    });
+  });
+  if (worksData.length > 0) {
+    const wsWorks = XLSX.utils.json_to_sheet(worksData);
+    XLSX.utils.book_append_sheet(wb, wsWorks, "作品明细");
+  }
   XLSX.writeFile(wb, `创作者追踪_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
 </script>
